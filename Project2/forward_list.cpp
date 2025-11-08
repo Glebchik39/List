@@ -15,9 +15,9 @@ template <class T>
 class List
 {
 	// Адрес головного элемента списка
-	T* Head;
+	Element<T>* Head;
 	// Адрес головного элемента списка
-	T* Tail;
+	Element<T>* Tail;
 	// Количество элементов списка
 	int Count;
 
@@ -43,6 +43,12 @@ public:
 
 	// Получение количества элементов, находящихся в списке
 	int GetCount();
+
+	void Delete(int value);
+
+	void AddToPosition(int value, T data);
+
+	void Search(int value);
 };
 
 template <class T>
@@ -66,6 +72,9 @@ int List<T>::GetCount()
 	// Возвращаем количество элементов
 	return Count;
 }
+
+
+
 template <class T>
 void List<T>::Add(T data)
 {
@@ -92,12 +101,70 @@ template <class T>
 void List<T>::Del()
 {
 	// запоминаем адрес головного элемента
-	Element* temp = Head;
+	Element<T>* temp = Head;
 	// перебрасываем голову на следующий элемент
 	Head = Head->Next;
 	// удаляем бывший головной элемент
 	delete temp;
 }
+
+template<class T>
+void List<T>::Delete(int value)
+{
+	if (value == 0)
+	{
+		Del();
+	}
+	Element<T>* temp = Head;
+	for (int i = 0; i < value - 1; i++)
+	{
+		temp = temp->Next;
+	}
+	Element<T>* element = temp->Next;
+	temp->Next = element->Next;
+	delete element;
+}
+
+template<class T>
+void List<T>::AddToPosition(int value, T data)
+{
+	Element<T>* newElement = new Element<T>;
+	if (value == 0)
+	{
+		newElement->Next = Head;
+		Head = newElement;
+	}
+	Element<T>* temp = Head;
+	for (int i = 0; i < value - 1; i++)
+	{
+		temp = temp->Next;
+	}
+	newElement->Next = temp->Next;
+	temp->Next = newElement;
+}
+
+template<class T>
+void List<T>::Search(int value)
+{
+	Element<T>* temp = Head;
+	for (int i = 0; i < value - 1; i++)
+	{
+		temp = temp->Next;
+	}
+	cout << "Position: " << value << " Data: " << temp->data;
+
+	if (value < 0 || Head == nullptr)
+	{
+		cout << "Ploxo position!" << endl;
+	}
+}
+
+
+
+
+
+
+
 template <class T>
 void List<T>::DelAll()
 {
@@ -111,7 +178,7 @@ template <class T>
 void List<T>::Print()
 {
 	// запоминаем адрес головного элемента
-	Element* temp = Head;
+	Element<T>* temp = Head;
 	// Пока еще есть элементы
 	while (temp != 0)
 	{
@@ -122,12 +189,11 @@ void List<T>::Print()
 	}
 	cout << "\n\n";
 }
-template <class T>
 // Тестовый пример
 void main()
 {
 	// Создаем объект класса List
-	List lst;
+	List<char> lst;
 
 	// Тестовая строка
 	char s[] = "Hello, World !!!\n";
@@ -146,5 +212,15 @@ void main()
 	lst.Del();
 	//Распечатываем содержимое списка
 	lst.Print();
+
+	lst.Delete(5);
+	lst.AddToPosition(2, 'g');
+	lst.Search(4);
+	lst.Print();
 }
+
+
+
+
+
 
